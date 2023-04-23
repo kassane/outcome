@@ -1,0 +1,5 @@
+.{
+    .name = "liboutcome",
+    .version = "2.2.3",
+    .dependencies = .{},
+}
