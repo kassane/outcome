@@ -1,3 +1,4 @@
 *.cache
 doc/outcome.hpp
 doc/src/public
+*zig-*/

@@ -1,0 +1,5 @@
+.{
+    .name = "outcome",
+    .version = "2.2.4",
+    .paths = .{""},
+}

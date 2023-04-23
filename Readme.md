@@ -1,11 +1,8 @@
-<table width="100%">
-<tr><th>master branch<th>develop branch
-<tr><td align="center"><img src="https://github.com/ned14/outcome/workflows/Documentation/badge.svg?branch=master"><td align="center"><img src="https://github.com/ned14/outcome/workflows/Documentation/badge.svg?branch=develop">
-<tr><td align="center"><img src="https://github.com/ned14/outcome/workflows/Installability/badge.svg?branch=master"><td align="center"><img src="https://github.com/ned14/outcome/workflows/Installability/badge.svg?branch=develop">
-<tr><td align="center"><a href="https://github.com/ned14/outcome/actions?query=workflow%3A%22Unit+tests+Linux%22"><img src="https://github.com/ned14/outcome/workflows/Unit%20tests%20Linux/badge.svg?branch=master"></a><td align="center"><a href="https://github.com/ned14/outcome/actions?query=workflow%3A%22Unit+tests+Linux%22"><img src="https://github.com/ned14/outcome/workflows/Unit%20tests%20Linux/badge.svg?branch=develop"></a>
-<tr><td align="center"><a href="https://github.com/ned14/outcome/actions?query=workflow%3A%22Unit+tests+Mac+OS%22"><img src="https://github.com/ned14/outcome/workflows/Unit%20tests%20Mac%20OS/badge.svg?branch=master"></a><td align="center"><a href="https://github.com/ned14/outcome/actions?query=workflow%3A%22Unit+tests+Mac+OS%22"><img src="https://github.com/ned14/outcome/workflows/Unit%20tests%20Mac%20OS/badge.svg?branch=develop"></a>
-<tr><td align="center"><a href="https://github.com/ned14/outcome/actions?query=workflow%3A%22Unit+tests+Windows%22"><img src="https://github.com/ned14/outcome/workflows/Unit%20tests%20Windows/badge.svg?branch=master"></a><td align="center"><a href="https://github.com/ned14/outcome/actions?query=workflow%3A%22Unit+tests+Windows%22"><img src="https://github.com/ned14/outcome/workflows/Unit%20tests%20Windows/badge.svg?branch=develop"></a>
-</table>
+# OUTCOME - zig-pkg support
+
+[![Unit tests Zig (embedded)](https://github.com/kassane/outcome/actions/workflows/unittests_zig_embedded.yml/badge.svg?branch=zig-pkg)](https://github.com/kassane/outcome/actions/workflows/unittests_zig_embedded.yml)
+[![Unit tests Zig](https://github.com/kassane/outcome/actions/workflows/unittests_zig.yml/badge.svg?branch=zig-pkg)](https://github.com/kassane/outcome/actions/workflows/unittests_zig.yml)
+[![Unit tests Zig (msvc)](https://github.com/kassane/outcome/actions/workflows/unittests_zig_msvc.yml/badge.svg?branch=zig-pkg)](https://github.com/kassane/outcome/actions/workflows/unittests_zig_msvc.yml)
 
 CTest dashboard: https://my.cdash.org/index.php?project=Boost.Outcome
 
@@ -33,24 +30,24 @@ Outcome v2 comes in single header file form. This is regenerated per commit. To 
 on Linux:
 
 ```
-wget https://github.com/ned14/outcome/raw/master/single-header/outcome.hpp
+wget https://github.com/kassane/outcome/raw/develop/single-header/outcome.hpp
 ```
 
 On BSD:
 
 ```
-fetch https://github.com/ned14/outcome/raw/master/single-header/outcome.hpp
+fetch https://github.com/kassane/outcome/raw/develop/single-header/outcome.hpp
 ```
 
 If you have `curl` installed:
 
 ```
-curl -O -J -L https://github.com/ned14/outcome/raw/master/single-header/outcome.hpp
+curl -O -J -L https://github.com/kassane/outcome/raw/develop/single-header/outcome.hpp
 ```
 
 Otherwise, simply download the raw file from above and place it wherever it suits you.
 If you might be debugging using Microsoft Visual Studio, you may find the debugger
-visualisation file at https://github.com/ned14/outcome/raw/master/include/outcome/outcome.natvis
+visualisation file at https://github.com/kassane/outcome/raw/develop/include/outcome/outcome.natvis
 useful to include into your build.
 
 ## Commits and tags in this git repository can be verified using:
