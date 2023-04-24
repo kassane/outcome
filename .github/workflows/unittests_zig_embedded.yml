@@ -1,0 +1,47 @@
+name: Unit tests Zig (embedded)
+
+on:
+  push:
+    branches:
+    - develop
+    - master
+    - zig-pkg
+  pull_request:
+  schedule:
+  - cron: '0 0 1 * *'
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        runs-on: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.runs-on }}
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - uses: goto-bus-stop/setup-zig@v2
+        with:
+          version: master
+      
+      - name: Build Summary (arm64-windows-gnu)
+        if: startsWith(matrix.runs-on, 'windows')
+        run: zig build -DTests -fsummary -freference-trace -Dtarget=aarch64-windows-gnu
+      
+      - name: Build Summary (arm64-linux-gnu)
+        if: startsWith(matrix.runs-on, 'ubuntu')
+        run: zig build -DTests -fsummary -freference-trace -Dtarget=aarch64-linux-gnu
+      
+      - name: Build Summary (mipsel-linux-gnueabi)
+        if: startsWith(matrix.runs-on, 'ubuntu')
+        run: zig build -DTests -fsummary -freference-trace -Dtarget=mipsel-linux-gnueabi
+      
+      - name: Build Summary (mips-linux-gnueabi)
+        if: startsWith(matrix.runs-on, 'ubuntu')
+        run: zig build -DTests -fsummary -freference-trace -Dtarget=mipsel-linux-gnueabi
+
+      - name: Build Summary (arm64-linux-musl)
+        if: startsWith(matrix.runs-on, 'ubuntu')
+        run: zig build -DTests -fsummary -freference-trace -Dtarget=aarch64-linux
