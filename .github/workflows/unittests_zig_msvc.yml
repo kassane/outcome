@@ -25,18 +25,18 @@ jobs:
       - uses: goto-bus-stop/setup-zig@v2
         with:
           version: master
-      - uses: microsoft/setup-msbuild@v1
+      - uses: ilammy/msvc-dev-cmd@v1
         if: ${{ matrix.target == 'x86_64-windows-msvc' }}
         with:
-          msbuild-architecture: x64
-      - uses: microsoft/setup-msbuild@v1
+          arch: amd64
+      - uses: ilammy/msvc-dev-cmd@v1
         if: ${{ matrix.target == 'aarch64-windows-msvc' }}
         with:
-          msbuild-architecture: arm64
-      - uses: microsoft/setup-msbuild@v1
+          arch: amd64_arm64
+      - uses: ilammy/msvc-dev-cmd@v1
         if: ${{ matrix.target == 'x86-windows-msvc' }}
         with:
-          msbuild-architecture: x86
+          arch: amd64_x86
       
       - name: Build Summary
         run: zig build -DTests -fsummary -freference-trace -Dtarget=${{matrix.target}}
