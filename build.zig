@@ -25,7 +25,17 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
     lib.addIncludePath("include");
-    lib.installHeadersDirectory("single-header", "");
+    lib.addCSourceFile("test/empty.cpp", &.{});
+    b.installDirectory(.{
+        .source_dir = "single-header",
+        .install_dir = .header,
+        .install_subdir = "",
+        .exclude_extensions = &.{
+            "md",
+            "experimental.hpp",
+        },
+    });
+    b.installArtifact(lib);
 
     // b.installArtifact(lib);
     if (tests) {
