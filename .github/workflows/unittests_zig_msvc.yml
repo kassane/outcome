@@ -14,14 +14,9 @@ jobs:
   build:
     strategy:
       fail-fast: false
-       matrix:
-        target: [
-            aarch64-windows-msvc,
-            x86-windows-msvc, # disabled for now as it seems like zig detects the wrong files
-            x86_64-windows-msvc,
-          ]
-        runs-on: windows-latest
-   
+      matrix:
+        target: [x86_64-windows-msvc, x86-windows-msvc, aarch64-windows-msvc]
+    runs-on: windows-latest   
     steps:
       - uses: actions/checkout@v3
         with:
