@@ -26,7 +26,7 @@ pub fn build(b: *std.Build) void {
     });
     lib.addIncludePath("include");
     lib.addCSourceFile("test/empty.cpp", &.{});
-    b.installDirectory(.{
+    lib.installHeadersDirectoryOptions(.{
         .source_dir = "single-header",
         .install_dir = .header,
         .install_subdir = "",
@@ -37,7 +37,6 @@ pub fn build(b: *std.Build) void {
     });
     b.installArtifact(lib);
 
-    // b.installArtifact(lib);
     if (tests) {
         buildTest(b, .{
             .lib = lib,
