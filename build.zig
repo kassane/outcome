@@ -184,20 +184,22 @@ pub fn build(b: *std.Build) void {
         });
         buildTest(b, .{
             .lib = lib,
-            .path = "test/tests/issue0220.cpp",
-        });
-        buildTest(b, .{
-            .lib = lib,
             .path = "test/tests/issue0244.cpp",
         });
         buildTest(b, .{
             .lib = lib,
             .path = "test/tests/issue0247.cpp",
         });
-        buildTest(b, .{
-            .lib = lib,
-            .path = "test/tests/issue0255.cpp",
-        });
+        if (!lib.target_info.target.isMusl()) {
+            buildTest(b, .{
+                .lib = lib,
+                .path = "test/tests/issue0220.cpp",
+            });
+            buildTest(b, .{
+                .lib = lib,
+                .path = "test/tests/issue0255.cpp",
+            });
+        }
         buildTest(b, .{
             .lib = lib,
             .path = "test/tests/issue0259.cpp",

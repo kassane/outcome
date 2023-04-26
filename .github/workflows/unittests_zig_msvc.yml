@@ -38,5 +38,6 @@ jobs:
         with:
           arch: amd64_x86
       
-      - name: Build Summary
-        run: zig build -DTests -fsummary -freference-trace -Dtarget=${{matrix.target}}
+      # wait: https://github.com/ziglang/zig/issues/15448
+      # - name: Build Summary
+      #   run: zig build -DTests -fsummary -freference-trace -Dtarget=${{matrix.target}}
