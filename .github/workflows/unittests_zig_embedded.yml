@@ -45,3 +45,15 @@ jobs:
       - name: Build Summary (arm64-linux-musl)
         if: startsWith(matrix.runs-on, 'ubuntu')
         run: zig build -DTests -fsummary -freference-trace -Dtarget=aarch64-linux
+      - name: Build Summary (riscv64-linux-musl)
+        if: startsWith(matrix.runs-on, 'ubuntu')
+        run: zig build -DTests -fsummary -freference-trace -Dtarget=riscv64-linux
+      - name: Build Summary (mispel-linux-musl)
+        if: startsWith(matrix.runs-on, 'ubuntu')
+        run: zig build -DTests -fsummary -freference-trace -Dtarget=mipsel-linux
+      - name: Build Summary (mips-linux-musl)
+        if: startsWith(matrix.runs-on, 'ubuntu')
+        run: zig build -DTests -fsummary -freference-trace -Dtarget=mips-linux
+      - name: Build Summary (powerpc64-linux-musl)
+        if: startsWith(matrix.runs-on, 'ubuntu')
+        run: zig build -DTests -fsummary -freference-trace -Dtarget=powerpc64-linux
