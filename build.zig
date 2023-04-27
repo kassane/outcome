@@ -46,6 +46,26 @@ pub fn build(b: *std.Build) void {
             .lib = lib,
             .path = "test/constexprs/WG21_P1886a.cpp",
         });
+        // buildTest(b, .{
+        //     .lib = lib,
+        //     .path = "test/constexprs/WG21_P1886.cpp",
+        // });
+        buildTest(b, .{
+            .lib = lib,
+            .path = "test/constexprs/max_result_get_value.cpp",
+        });
+        buildTest(b, .{
+            .lib = lib,
+            .path = "test/constexprs/min_result_get_value.cpp",
+        });
+        buildTest(b, .{
+            .lib = lib,
+            .path = "test/constexprs/max_result_construct_value_move_destruct.cpp",
+        });
+        buildTest(b, .{
+            .lib = lib,
+            .path = "test/constexprs/min_result_construct_value_move_destruct.cpp",
+        });
         buildTest(b, .{
             .lib = lib,
             .path = "test/tests/coroutine-support.cpp",
@@ -193,11 +213,27 @@ pub fn build(b: *std.Build) void {
         if (!lib.target_info.target.isMusl()) {
             buildTest(b, .{
                 .lib = lib,
+                .path = "include/outcome/experimental/status-code/test/issue0050.cpp",
+            });
+            buildTest(b, .{
+                .lib = lib,
                 .path = "test/tests/issue0220.cpp",
             });
             buildTest(b, .{
                 .lib = lib,
                 .path = "test/tests/issue0255.cpp",
+            });
+            buildTest(b, .{
+                .lib = lib,
+                .path = "include/outcome/experimental/status-code/test/result.cpp",
+            });
+            buildTest(b, .{
+                .lib = lib,
+                .path = "include/outcome/experimental/status-code/test/p0709a.cpp",
+            });
+            buildTest(b, .{
+                .lib = lib,
+                .path = "include/outcome/experimental/status-code/wg21/file_io_error.cpp",
             });
         }
         buildTest(b, .{
@@ -213,6 +249,7 @@ fn buildTest(b: *std.Build, info: BuildInfo) void {
         .optimize = info.lib.optimize,
         .target = info.lib.target,
     });
+    test_exe.addIncludePath("include/outcome/experimental/status-code/include");
     test_exe.addIncludePath("test/quickcpplib/include");
     test_exe.addIncludePath("test/quickcpplib/include/quickcpplib");
     test_exe.addCSourceFile(info.path, &.{
