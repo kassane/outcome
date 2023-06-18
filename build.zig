@@ -50,7 +50,7 @@ pub fn build(b: *std.Build) void {
         //     .lib = lib,
         //     .path = "test/constexprs/WG21_P1886.cpp",
         // });
-        buildTest(b, .{
+        if (!target.isDarwin()) buildTest(b, .{
             .lib = lib,
             .path = "test/constexprs/max_result_get_value.cpp",
         });
@@ -58,7 +58,7 @@ pub fn build(b: *std.Build) void {
             .lib = lib,
             .path = "test/constexprs/min_result_get_value.cpp",
         });
-        buildTest(b, .{
+        if (!target.isDarwin()) buildTest(b, .{
             .lib = lib,
             .path = "test/constexprs/max_result_construct_value_move_destruct.cpp",
         });
@@ -78,7 +78,7 @@ pub fn build(b: *std.Build) void {
             .lib = lib,
             .path = "test/tests/constexpr.cpp",
         });
-        buildTest(b, .{
+        if (!target.isDarwin()) buildTest(b, .{
             .lib = lib,
             .path = "test/tests/core-outcome.cpp",
         });
