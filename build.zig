@@ -27,7 +27,7 @@ pub fn build(b: *std.Build) void {
     lib.addIncludePath("include");
     lib.addCSourceFile("test/empty.cpp", &.{});
     lib.installHeadersDirectoryOptions(.{
-        .source_dir = "single-header",
+        .source_dir = .{ .path = "single-header" },
         .install_dir = .header,
         .install_subdir = "",
         .exclude_extensions = &.{
@@ -35,6 +35,7 @@ pub fn build(b: *std.Build) void {
             "experimental.hpp",
         },
     });
+
     b.installArtifact(lib);
 
     if (tests) {
@@ -50,7 +51,7 @@ pub fn build(b: *std.Build) void {
         //     .lib = lib,
         //     .path = "test/constexprs/WG21_P1886.cpp",
         // });
-        if (!target.isDarwin()) buildTest(b, .{
+        if (!target.isDarwin() and target.getAbi() != .msvc) buildTest(b, .{
             .lib = lib,
             .path = "test/constexprs/max_result_get_value.cpp",
         });
@@ -58,7 +59,7 @@ pub fn build(b: *std.Build) void {
             .lib = lib,
             .path = "test/constexprs/min_result_get_value.cpp",
         });
-        if (!target.isDarwin()) buildTest(b, .{
+        if (!target.isDarwin() and target.getAbi() != .msvc) buildTest(b, .{
             .lib = lib,
             .path = "test/constexprs/max_result_construct_value_move_destruct.cpp",
         });
@@ -210,7 +211,7 @@ pub fn build(b: *std.Build) void {
             .lib = lib,
             .path = "test/tests/issue0247.cpp",
         });
-        if (!lib.target_info.target.isMusl()) {
+        if (!lib.target_info.target.isMusl() and target.getAbi() != .msvc) {
             buildTest(b, .{
                 .lib = lib,
                 .path = "include/outcome/experimental/status-code/test/issue0050.cpp",
@@ -235,8 +236,20 @@ pub fn build(b: *std.Build) void {
                 .lib = lib,
                 .path = "include/outcome/experimental/status-code/wg21/file_io_error.cpp",
             });
+            buildTest(b, .{
+                .lib = lib,
+                .path = "test/tests/experimental-p0709a.cpp",
+            });
+            if (!target.isDarwin()) buildTest(b, .{
+                .lib = lib,
+                .path = "test/tests/experimental-core-outcome-status.cpp",
+            });
+            buildTest(b, .{
+                .lib = lib,
+                .path = "test/tests/experimental-core-result-status.cpp",
+            });
         }
-        buildTest(b, .{
+        if (target.getAbi() != .msvc) buildTest(b, .{
             .lib = lib,
             .path = "test/tests/issue0259.cpp",
         });
@@ -256,7 +269,12 @@ fn buildTest(b: *std.Build, info: BuildInfo) void {
         "-Wall",
         "-Wextra",
     });
-    test_exe.linkLibCpp();
+    if (test_exe.target.isWindows())
+        test_exe.subsystem = .Console;
+    if (test_exe.target.getAbi() == .msvc) {
+        xWin(b, test_exe);
+        test_exe.linkLibC();
+    } else test_exe.linkLibCpp();
     b.installArtifact(test_exe);
 
     const run_cmd = b.addRunArtifact(test_exe);
@@ -281,3 +299,34 @@ const BuildInfo = struct {
         return split.first();
     }
 };
+
+fn xWin(b: *std.Build, exe: *std.Build.Step.Compile) void {
+    const target = (std.zig.system.NativeTargetInfo.detect(exe.target) catch unreachable).target;
+    const arch: []const u8 = switch (target.cpu.arch) {
+        .x86_64 => "x64",
+        .x86 => "x86",
+        .arm, .armeb => "arm",
+        .aarch64 => "arm64",
+        else => @panic("Unsupported Architecture"),
+    };
+
+    exe.setLibCFile(.{ .path = sdkPath("/libc.txt") });
+    exe.addSystemIncludePath(sdkPath("/.xwin/crt/include"));
+    exe.addSystemIncludePath(sdkPath("/.xwin/sdk/include"));
+    exe.addSystemIncludePath(sdkPath("/.xwin/sdk/include/10.0.22000/cppwinrt"));
+    exe.addSystemIncludePath(sdkPath("/.xwin/sdk/include/10.0.22000/ucrt"));
+    exe.addSystemIncludePath(sdkPath("/.xwin/sdk/include/10.0.22000/um"));
+    exe.addSystemIncludePath(sdkPath("/.xwin/sdk/include/10.0.22000/shared"));
+    exe.addLibraryPath(b.fmt(sdkPath("/.xwin/crt/lib/{s}"), .{arch}));
+    exe.addLibraryPath(b.fmt(sdkPath("/.xwin/sdk/lib/ucrt/{s}"), .{arch}));
+    exe.addLibraryPath(b.fmt(sdkPath("/.xwin/sdk/lib/um/{s}"), .{arch}));
+}
+
+fn sdkPath(comptime suffix: []const u8) []const u8 {
+    if (suffix[0] != '/') @compileError("relToPath requires an absolute path!");
+    return comptime blk: {
+        @setEvalBranchQuota(2000);
+        const root_dir = std.fs.path.dirname(@src().file) orelse ".";
+        break :blk root_dir ++ suffix;
+    };
+}

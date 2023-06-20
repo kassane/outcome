@@ -1,43 +1,24 @@
 name: Unit tests Zig (msvc)
 
-on:
-  push:
-    branches:
-    - develop
-    - master
-    - zig-pkg
-  pull_request:
-  schedule:
-  - cron: '0 0 1 * *'
+on: [push, pull_request]
 
 jobs:
   build:
     strategy:
       fail-fast: false
       matrix:
-        target: [x86_64-windows-msvc, x86-windows-msvc, aarch64-windows-msvc]
-    runs-on: windows-latest   
+        target: [x86_64, x86, aarch64]
+    runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          submodules: recursive
-          fetch-depth: 0
       - uses: goto-bus-stop/setup-zig@v2
         with:
           version: master
-      - uses: ilammy/msvc-dev-cmd@v1
-        if: ${{ matrix.target == 'x86_64-windows-msvc' }}
+      - uses: baptiste0928/cargo-install@v2
         with:
-          arch: amd64
-      - uses: ilammy/msvc-dev-cmd@v1
-        if: ${{ matrix.target == 'aarch64-windows-msvc' }}
-        with:
-          arch: amd64_arm64
-      - uses: ilammy/msvc-dev-cmd@v1
-        if: ${{ matrix.target == 'x86-windows-msvc' }}
-        with:
-          arch: amd64_x86
+          crate: xwin
       
-      # wait: https://github.com/ziglang/zig/issues/15448
-      # - name: Build Summary
-      #   run: zig build -DTests -fsummary -freference-trace -Dtarget=${{matrix.target}}
+      - name: Run xwin
+        run: xwin --arch=${{ matrix.target }} --accept-license splat --output $PWD/.xwin --include-debug-symbols --preserve-ms-arch-notation --disable-symlinks --include-debug-libs
+      - name: build summary
+        run: zig build -DTests --summary all -freference-trace -Doptimize=ReleaseFast -Dtarget=${{ matrix.target }}-windows-msvc

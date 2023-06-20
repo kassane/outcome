@@ -4,3 +4,4 @@ doc/src/public
 
 zig-cache/
 zig-out/
+.xwin*/

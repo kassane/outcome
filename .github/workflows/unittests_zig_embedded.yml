@@ -42,7 +42,7 @@ jobs:
       
       - name: Build Summary (mips-linux-gnueabi)
         if: startsWith(matrix.runs-on, 'ubuntu')
-        run: zig build -DTests --summary all -freference-trace -Dtarget=mipsel-linux-gnueabi
+        run: zig build -DTests --summary all -freference-trace -Dtarget=mips-linux-gnueabi
 
       - name: Build Summary (arm64-linux-musl)
         if: startsWith(matrix.runs-on, 'ubuntu')
