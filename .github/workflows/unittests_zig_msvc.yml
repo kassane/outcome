@@ -1,6 +1,14 @@
 name: Unit tests Zig (msvc)
 
-on: [push, pull_request]
+on:
+  push:
+    branches:
+    - develop
+    - master
+    - zig-pkg
+  pull_request:
+  schedule:
+  - cron: '0 0 1 * *'
 
 jobs:
   build:
